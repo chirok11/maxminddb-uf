@@ -1,4 +1,4 @@
-struct NormalizedDatabase {
+pub struct NormalizedDatabase {
     inner: maxminddb::Reader<Vec<u8>>,
 }
 
@@ -14,16 +14,20 @@ impl NormalizedDatabase {
     }
 }
 
-struct NormalizedCityRecord<'a> {
+pub struct NormalizedCityRecord<'a> {
     inner: maxminddb::geoip2::City<'a>,
 }
 
 #[allow(unused)]
 impl<'a> NormalizedCityRecord<'a> {
+    /// Returns the registered country iso code of record [`NormalizedCityRecord`].
     pub fn registered_country_iso_code(&self) -> Option<&str> {
         self.inner.registered_country.as_ref()?.iso_code
     }
 
+    /// Returns the registered country name of record [`NormalizedCityRecord`].
+    /// Accepts a language code.
+    /// Returns `None` if the country is not available.
     pub fn registered_country_name(&self, language: Option<&'a str>) -> Option<String> {
         self.inner
             .registered_country
@@ -34,10 +38,15 @@ impl<'a> NormalizedCityRecord<'a> {
             .map(|s| s.to_string())
     }
 
+    /// Returns the registered country name of record [`NormalizedCityRecord`].
+    /// Returns `None` if the country iso code is not available.
     pub fn represented_country_iso_code(&self) -> Option<&str> {
         self.inner.represented_country.as_ref()?.iso_code
     }
 
+    /// Returns the registered country name of record [`NormalizedCityRecord`].
+    /// Accepts a language code.
+    /// Returns `None` if the country is not available.
     pub fn represented_country_name(&self, language: Option<&'a str>) -> Option<String> {
         self.inner
             .represented_country
@@ -48,6 +57,9 @@ impl<'a> NormalizedCityRecord<'a> {
             .map(|s| s.to_string())
     }
 
+    /// Returns the city name of record [`NormalizedCityRecord`].
+    /// Accepts a language code.
+    /// Returns `None` if the city is not available.
     pub fn city_name(&self, language: Option<&'a str>) -> Option<String> {
         self.inner
             .city
@@ -58,8 +70,18 @@ impl<'a> NormalizedCityRecord<'a> {
             .map(|s| s.to_string())
     }
 
+    /// Returns the city geoname id of record [`NormalizedCityRecord`].
+    /// Returns `None` if the city geoname id is not available.
+    pub fn city_geoname_id(&self) -> Option<u32> {
+        self.inner.city.as_ref()?.geoname_id
+    }
+
     pub fn continent_code(&self) -> Option<&str> {
         self.inner.continent.as_ref()?.code
+    }
+
+    pub fn continent_geoname_id(&self) -> Option<u32> {
+        self.inner.continent.as_ref()?.geoname_id
     }
 
     pub fn continent_name(&self, language: Option<&'a str>) -> Option<String> {
