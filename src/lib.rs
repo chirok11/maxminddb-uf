@@ -92,14 +92,50 @@ impl<'a> NormalizedCityRecord<'a> {
         self.inner.city.as_ref()?.geoname_id
     }
 
+    /// Returns the subdivision geoname id of record [`NormalizedCityRecord`].
+    /// Accepts index of subdivision.
+    /// Returns `None` if the subdivision geoname id is not available.
+    pub fn subdivision_geoname_id(&self, idx: usize) -> Option<u32> {
+        self.inner.subdivisions.as_ref()?.get(idx)?.geoname_id
+    }
+
+    /// Returns the subdivision name of record [`NormalizedCityRecord`].
+    /// Accepts index of subdivision and preferred language.
+    /// Returns `None` if the subdivision name is not available.
+    pub fn subdivision_name(&self, idx: usize, language: Option<&'a str>) -> Option<String> {
+        self.inner
+            .subdivisions
+            .as_ref()?
+            .get(idx)?
+            .names
+            .as_ref()?
+            .get(language.unwrap_or("en"))
+            .map(|s| s.to_string())
+    }
+
+    /// Returns the subdivision iso code of record [`NormalizedCityRecord`].
+    /// Accepts index of subdivision.
+    /// Returns `None` if the subdivision iso code is not available.
+    pub fn subdivision_iso_code(&self, idx: usize) -> Option<&str> {
+        self.inner.subdivisions.as_ref()?.get(idx)?.iso_code
+    }
+
+    /// Returns the continent code of record [`NormalizedCityRecord`].
+    /// Returns `None` if the continent code is not available.
+
     pub fn continent_code(&self) -> Option<&str> {
         self.inner.continent.as_ref()?.code
     }
 
+    /// Returns the continent geoname id of record [`NormalizedCityRecord`].
+    /// Returns `None` if the continent geoname id is not available.
     pub fn continent_geoname_id(&self) -> Option<u32> {
         self.inner.continent.as_ref()?.geoname_id
     }
 
+    /// Returns the continent name of record [`NormalizedCityRecord`].
+    /// Accepts a language code.
+    /// Returns `None` if the continent name is not available.
     pub fn continent_name(&self, language: Option<&'a str>) -> Option<String> {
         self.inner
             .continent
@@ -110,14 +146,20 @@ impl<'a> NormalizedCityRecord<'a> {
             .map(|s| s.to_string())
     }
 
+    /// Returns the postal code of record [`NormalizedCityRecord`].
+    /// Returns `None` if the postal code is not available.
     pub fn postal_code(&self) -> Option<&str> {
         self.inner.postal.as_ref()?.code
     }
 
+    /// Returns the timezone of record [`NormalizedCityRecord`].
+    /// Returns `None` if the timezone is not available.
     pub fn time_zone(&self) -> Option<&str> {
         self.inner.location.as_ref()?.time_zone
     }
 
+    /// Returns the [`Option<(f64, f64)>`] of record [`NormalizedCityRecord`].
+    /// Returns `None` if the latitude is not available.
     pub fn lon_and_lat(&self) -> Option<(f64, f64)> {
         Some((
             self.inner.location.as_ref()?.longitude?,
