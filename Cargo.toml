@@ -2,6 +2,8 @@
 name = "maxminddb-uf"
 version = "0.1.0"
 edition = "2021"
+homepage = "https://github.com/chirok11/maxminddb-uf"
+description = "User-friendly MaxMindDB wrapper around `maxminddb` crate"
 
 [dependencies]
 maxminddb = "0.23.0"
