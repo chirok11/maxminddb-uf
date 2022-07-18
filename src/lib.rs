@@ -20,6 +20,22 @@ pub struct NormalizedCityRecord<'a> {
 
 #[allow(unused)]
 impl<'a> NormalizedCityRecord<'a> {
+    /// Returns the country iso code
+    pub fn country_code(&self) -> Option<&str> {
+        self.inner.country.as_ref()?.iso_code
+    }
+
+    /// Returns the country name
+    pub fn country_name(&self, language: Option<&'a str>) -> Option<String> {
+        self.inner
+            .country
+            .as_ref()?
+            .names
+            .as_ref()?
+            .get(language.unwrap_or("en"))
+            .map(|s| s.to_string())
+    }
+
     /// Returns the registered country iso code of record [`NormalizedCityRecord`].
     pub fn registered_country_iso_code(&self) -> Option<&str> {
         self.inner.registered_country.as_ref()?.iso_code
