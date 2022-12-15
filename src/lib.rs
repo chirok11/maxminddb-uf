@@ -166,6 +166,15 @@ impl<'a> NormalizedCityRecord<'a> {
             self.inner.location.as_ref()?.latitude?,
         ))
     }
+
+    /// Returns the [`Option<(f64, f64)>`] of record [`NormalizedCityRecord`].
+    /// Returns `None` if the latitude is not available.
+    pub fn lat_and_lon(&self) -> Option<(f64, f64)> {
+        Some((
+            self.inner.location.as_ref()?.latitude?,
+            self.inner.location.as_ref()?.longitude?,
+        ))
+    }
 }
 
 impl<'a> From<maxminddb::geoip2::City<'a>> for NormalizedCityRecord<'a> {
